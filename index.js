@@ -7,6 +7,16 @@ board.forEach(element => {
 
 }
 
+const resetBoard = (board) => {
+  board.forEach(element => {
+    element.forEach(index => {
+      index = 0;
+    })
+  });
+  printBoard(board);
+  GetUserResponse(board, true);
+}
+
 const CheckWinner = (board, turn) => {
   let winner, check;
   if(turn){
@@ -14,6 +24,7 @@ const CheckWinner = (board, turn) => {
   } else {
     check = 'o'
   }
+  // need to refactor to remove repeats
   //horizontal
   board.forEach(row => {
     let count = 0;
@@ -38,22 +49,62 @@ const CheckWinner = (board, turn) => {
       winner = check;
     } 
   }
-//diagnal
+  //diagnal 
+  const diagnalOne = () => {
+    let count = 0;
+    for(let i = 0; i < 3; i++ ) { 
+      if(board[i][i] === check) {
+        count += 1
+      }
+    }
+    if(count === 3) {
+      winner = check;
+    }
+  }
+  const diagnalTwo = () => {
+    let count = 0;
+    row = 0;
+    col = 2;
+    while(row <= 2) {
 
-if(winner){
-  console.log(winner, 'won!' )
-} else { GetUserResponse(board, !turn) }
+      if(board[row][col] === check) {
+        count += 1
+       }
+      row += 1;
+      col -= 1
+    }
+    
+    if(count === 3) {
+      winner = check;
+    }
+  }
+  diagnalOne();
+  diagnalTwo();
+
+  if(winner){
+    console.log(winner, 'won!' )
+    console.log("#################");
+    console.log("play again?");
+    //reset board
+    resetBoard(board);
+  } else { GetUserResponse(board, !turn) }
 
 }
 
 const GetUserResponse = (board, turn) => {
+  let player;
+  if(turn){
+    player = 'x'
+  } else {
+    player = 'o'
+  }
+  console.log('Player ', player, 'make your move');
+  console.log('Please choose a row (0-2)');
+  console.log('and a column (0-2)');
   prompt.get(['row', 'column'], (err, result) => {
     console.log(' You chose,', result.row, result.column);
-    if(turn){
-      board[result.row][result.column] = 'x'
-    } else {
-      board[result.row][result.column] = 'o'
-    }
+    
+      board[result.row][result.column] = player
     
     printBoard(board);
     CheckWinner(board, turn);
