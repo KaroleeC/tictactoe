@@ -13,16 +13,15 @@ const resetBoard = (board) => {
       index = 0;
     })
   });
-  printBoard(board);
   GetUserResponse(board, true);
 }
 
 const CheckWinner = (board, turn) => {
   let winner, check;
   if(turn){
-    check = 'x'
+    check = 'x';
   } else {
-    check = 'o'
+    check = 'o';
   }
   // need to refactor to remove repeats
   //horizontal
